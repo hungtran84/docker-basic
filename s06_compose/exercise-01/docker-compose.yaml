@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+
+  drupal:
+    image: drupal:8.3.7-apache
+    ports:
+      - 8080:80
+    networks:
+      - frontend
+      - database
+    volumes:
+      - drupal_data:/var/www/html
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:9.6.5-alpine
+    # environment:
+    #   POSTGRES_DB: drupaldb
+    #   POSTGRES_USER: drupaluser
+    #   POSTGRES_PASSWORD: drupalpassword
+    env_file: .env
+    networks:
+      - frontend
+      - database
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+networks:
+  frontend:
+  database:
+
+
+volumes:
+  db_data:
+  drupal_data:
